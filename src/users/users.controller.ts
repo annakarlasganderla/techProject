@@ -15,6 +15,7 @@ import { GetUserResponse } from './dto/get-user.dto';
 import { Roles } from '../roles/decorators/roles.decorator';
 import {UserType} from '../users/enum/user-type.enum';
 import { RolesGuard } from 'src/roles/roles.guard';
+import { Public } from 'src/auth/decorators/auth.decorators';
 @ApiTags('users')
 @Controller('users')
 export class UsersController {
@@ -22,6 +23,7 @@ export class UsersController {
 
   @Post('create')
   @Roles(UserType.Admin)
+  @Public()
   @ApiResponse({ status: 201 })
   async create(@Body() createUserDto: CreateUserDto): Promise<any> {
     return await this.usersService.create(createUserDto);
@@ -31,11 +33,6 @@ export class UsersController {
   @ApiResponse({ status: 200, type: GetUserResponse })
   async findOne(@Param('id') id: string): Promise<GetUserResponse> {
     return await this.usersService.findById(id);
-  }
-
-  @Get('list-all')
-  async findAll() {
-    return await this.usersService.findAll();
   }
 
   @Put('edit/:id')

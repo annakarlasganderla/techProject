@@ -7,7 +7,6 @@ import { User } from './users/entities/user.entity';
 import { UsersController } from './users/users.controller';
 import { DatabaseModule } from './database/database.module';
 import { AuthModule } from './auth/auth.module';
-import { RolesModule } from './roles/roles.module';
 import { APP_GUARD } from '@nestjs/core';
 import { RolesGuard } from './roles/roles.guard';
 import { JwtModule } from '@nestjs/jwt';
@@ -17,7 +16,6 @@ import { JwtModule } from '@nestjs/jwt';
     DatabaseModule,
     UsersModule,
     AuthModule,
-    RolesModule,
     JwtModule
   ],
   providers: [

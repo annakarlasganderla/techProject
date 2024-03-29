@@ -6,7 +6,6 @@ import * as basicAuth from 'express-basic-auth';
 import { Connection } from 'typeorm';
 import Seeder from './database/seeds/seeder.seeder';
 
-
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
@@ -17,7 +16,6 @@ async function bootstrap() {
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
-  //app.useGlobalPipes(new ValidationPipe({ transform: true }));
 
   app.use(
     ['/docs', '/docs-json'],
@@ -36,6 +34,7 @@ async function bootstrap() {
   const connection = app.get(Connection);
   await connection.synchronize();
   await Seeder.run(connection);
+  app.useGlobalPipes(new ValidationPipe({ transform: true }));
 
   await app.listen(3000);
 }
