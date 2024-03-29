@@ -1,13 +1,14 @@
 import { HttpException, Injectable, Logger } from '@nestjs/common';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { UpdateUserDto, UpdateUserResponse } from '../dto/update-user.dto';
-import { handleErrors } from '../../commons/common.service';
+import { handleErrors } from '../../commons/services/common.service';
 import { GetUserResponse } from '../dto/get-user.dto';
 import { JwtService } from '@nestjs/jwt';
 import { compare, hash } from 'bcryptjs';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../entities/user.entity';
 import { Repository } from 'typeorm';
+import { CreatedEntity } from 'src/commons/dto/default-responses.dto';
 
 @Injectable()
 export class UsersService {
@@ -18,13 +19,12 @@ export class UsersService {
     private usersRepository: Repository<User>,
   ) {}
 
-  async create(createUserDto: CreateUserDto): Promise<any> {
+  async create(createUserDto: CreateUserDto): Promise<CreatedEntity> {
     try {
       const { password } = createUserDto;
       const hashedPassword = await this.hashPassword(password);
       
       createUserDto.createdAt = new Date();
-      
       const newUser = {
         ...createUserDto,
         password: hashedPassword,
@@ -35,7 +35,7 @@ export class UsersService {
 
       this.logger.debug('User created successfully');
 
-      return { message: `User ${newUser} created successfully` };
+      return { message: `User ${newUser.name} created successfully` };
     } catch (e: any) {
       handleErrors(e.message, e.code);
     }

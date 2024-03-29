@@ -5,22 +5,14 @@ import { IsNotEmpty, IsString } from 'class-validator';
 @Entity()
 export class User extends AbstractClass {
   @Column()
-  @IsString()
-  @IsNotEmpty()
   name: string;
 
-  @Column()
-  @IsString()
-  @IsNotEmpty()
+  @Column({unique: true})
   userName: string;
 
-  @Column()
-  @IsString()
-  @IsNotEmpty()
+  @Column({unique: true})
   password: string;
 
-  @Column()
-  @IsString()
-  @IsNotEmpty()
+  @Column({unique: true})
   email: string;
 }

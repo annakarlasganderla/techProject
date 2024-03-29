@@ -7,12 +7,14 @@ import { User } from './users/entities/user.entity';
 import { UsersController } from './users/users.controller';
 import { DatabaseModule } from './database/database.module';
 import { AuthModule } from './auth/auth.module';
+import { RolesModule } from './roles/roles.module';
 
 @Module({
   imports: [
     DatabaseModule,
     UsersModule,
     AuthModule,
+    RolesModule,
   ],
 })
 export class AppModule {}
