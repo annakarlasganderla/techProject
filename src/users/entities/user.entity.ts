@@ -15,4 +15,7 @@ export class User extends AbstractClass {
 
   @Column({unique: true})
   email: string;
+
+  @Column()
+  userType: number;
 }

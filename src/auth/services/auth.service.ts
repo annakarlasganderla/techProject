@@ -7,6 +7,7 @@ import {
   import { AuthDto, AuthResponse } from '../dto/auth.dto';
   import { UsersService } from '../../users/services/users.service';
   import { JwtService } from '@nestjs/jwt';
+import { PasswordHash } from 'src/commons/services/common.service';
   
   @Injectable()
   export class AuthService {
@@ -14,6 +15,8 @@ import {
       private usersService: UsersService,
       private jwtService: JwtService,
     ) {}
+
+    private passwordHash = PasswordHash();
   
     public async login(authDto: AuthDto): Promise<AuthResponse> {
       const { userName, password } = authDto;
@@ -23,12 +26,12 @@ import {
   
         if (
             user &&
-            !(await this.usersService.isPasswordsEqual(password, user.password))
+            !(await this.passwordHash.isPasswordsEqual(password, user.password))
           ) {
             throw new UnauthorizedException();
           }
   
-        const payload = { username: userName, sub: user.id };
+        const payload = { username: userName,userType: user.userType, sub: user.id };
   
         return {
           access_token: await this.jwtService.signAsync(payload, {

@@ -17,7 +17,7 @@ async function bootstrap() {
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
-  app.useGlobalPipes(new ValidationPipe({ transform: true }));
+  //app.useGlobalPipes(new ValidationPipe({ transform: true }));
 
   app.use(
     ['/docs', '/docs-json'],
@@ -29,14 +29,13 @@ async function bootstrap() {
     }),
   );
 
-
   SwaggerModule.setup('api', app, document);
   app.enableCors({ origin: 'http://localhost:3000' });
 
-   //Seeder
-   const connection = app.get(Connection);
-   await connection.synchronize();
-   await Seeder.run(connection);
+  //Seeder
+  const connection = app.get(Connection);
+  await connection.synchronize();
+  await Seeder.run(connection);
 
   await app.listen(3000);
 }

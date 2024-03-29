@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { User } from 'src/users/entities/user.entity';
 
 export class AuthResponse {
   @ApiProperty({
@@ -21,4 +22,14 @@ export class AuthDto {
     description: `Your password`,
   })
   password: string;
+}
+
+export class LoginPayload {
+  id: string;
+  userType: number;
+
+  constructor(user: User) {
+    this.id = user.id;
+    this.userType = user.userType;
+  }
 }

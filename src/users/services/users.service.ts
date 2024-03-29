@@ -4,15 +4,16 @@ import { UpdateUserDto, UpdateUserResponse } from '../dto/update-user.dto';
 import { handleErrors } from '../../commons/services/common.service';
 import { GetUserResponse } from '../dto/get-user.dto';
 import { JwtService } from '@nestjs/jwt';
-import { compare, hash } from 'bcryptjs';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../entities/user.entity';
 import { Repository } from 'typeorm';
 import { CreatedEntity } from 'src/commons/dto/default-responses.dto';
+import {PasswordHash} from '../../commons/services/common.service';
 
 @Injectable()
 export class UsersService {
   private logger = new Logger('User');
+  private passwordHash = PasswordHash();
 
   constructor(
     @InjectRepository(User)
@@ -22,7 +23,7 @@ export class UsersService {
   async create(createUserDto: CreateUserDto): Promise<CreatedEntity> {
     try {
       const { password } = createUserDto;
-      const hashedPassword = await this.hashPassword(password);
+      const hashedPassword = await this.passwordHash.hashPassword(password);
       
       createUserDto.createdAt = new Date();
       const newUser = {
@@ -120,24 +121,4 @@ export class UsersService {
     }
   }
 
-  /**
-   * HELPERS
-   */
-
-  protected generateCode(): string {
-    return (Math.random() + 1).toString(36).substring(5);
-  }
-
-  async hashPassword(password: string): Promise<string> {
-    const saltRounds = 10;
-    const hashedPassword = await hash(password, saltRounds);
-    return hashedPassword;
-  }
-
-  async isPasswordsEqual(
-    password: string,
-    hashedPassword: string,
-  ): Promise<boolean> {
-    return await compare(password, hashedPassword);
-  }
 }

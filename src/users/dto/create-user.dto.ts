@@ -36,4 +36,10 @@ export class CreateUserDto {
   })
   @IsNotEmpty()
   createdAt: Date;
+
+  @ApiProperty({
+    example: '1',
+  })
+  @IsNotEmpty()
+  userType: number;
 }
