@@ -9,9 +9,9 @@ export abstract class AbstractClass {
   @Column()
   createdAt: Date;
 
-  @Column()
+  @Column({nullable: true})
   updatedAt: Date;
 
-  @Column()
+  @Column({nullable: true})
   deletedAt: Date;
 }

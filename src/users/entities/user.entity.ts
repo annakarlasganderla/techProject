@@ -1,4 +1,4 @@
-import { AbstractClass } from 'src/database/AbstractClass.class';
+import { AbstractClass } from 'src/database/Abstract/AbstractClass.class';
 import { Entity, Column } from 'typeorm';
 import { IsNotEmpty, IsString } from 'class-validator';
 

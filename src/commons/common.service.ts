@@ -11,6 +11,6 @@ export const handleErrors = (message: string, code: number) => {
 export const convertToken = (context: any) => {
   const authHeader = context.headers.authorization;
   const token = authHeader?.replace('Bearer ', '');
-  const decodedToken: any = jwt.verify(token, process.env.SECRET);
+  const decodedToken: any = jwt.verify(token, 'ssandkbafdheiwe5234@$#56666');
   return decodedToken.sub;
 };

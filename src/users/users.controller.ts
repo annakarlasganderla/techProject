@@ -6,17 +6,18 @@ import {
   Param,
   Put,
 } from '@nestjs/common';
-import { UsersService } from './users.service';
+import { UsersService } from './services/users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto, UpdateUserResponse } from './dto/update-user.dto';
-import { ApiResponse } from '@nestjs/swagger';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { GetUserResponse } from './dto/get-user.dto';
-
+import { Public } from 'src/auth/decorators/auth.decorators';
+@ApiTags('users')
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
- // @Public()
+  @Public()
   @Post('create')
   @ApiResponse({ status: 201 })
   async create(@Body() createUserDto: CreateUserDto): Promise<any> {
@@ -27,6 +28,11 @@ export class UsersController {
   @ApiResponse({ status: 200, type: GetUserResponse })
   async findOne(@Param('id') id: string): Promise<GetUserResponse> {
     return await this.usersService.findById(id);
+  }
+
+  @Get('list-all')
+  async findAll() {
+    return await this.usersService.findAll();
   }
 
   @Put('edit/:id')

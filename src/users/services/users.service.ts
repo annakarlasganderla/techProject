@@ -1,12 +1,12 @@
 import { HttpException, Injectable, Logger } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto, UpdateUserResponse } from './dto/update-user.dto';
-import { handleErrors } from '../commons/common.service';
-import { GetUserResponse } from './dto/get-user.dto';
+import { CreateUserDto } from '../dto/create-user.dto';
+import { UpdateUserDto, UpdateUserResponse } from '../dto/update-user.dto';
+import { handleErrors } from '../../commons/common.service';
+import { GetUserResponse } from '../dto/get-user.dto';
 import { JwtService } from '@nestjs/jwt';
 import { compare, hash } from 'bcryptjs';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from './entities/user.entity';
+import { User } from '../entities/user.entity';
 import { Repository } from 'typeorm';
 
 @Injectable()
@@ -22,18 +22,28 @@ export class UsersService {
     try {
       const { password } = createUserDto;
       const hashedPassword = await this.hashPassword(password);
-
+      
+      createUserDto.createdAt = new Date();
+      
       const newUser = {
         ...createUserDto,
         password: hashedPassword,
         recoverCode: null,
       };
 
-      await this.usersRepository.create(newUser);
+      const user = await this.usersRepository.insert(newUser);
 
       this.logger.debug('User created successfully');
 
-      return { message: `User ${newUser.name} created successfully` };
+      return { message: `User ${newUser} created successfully` };
+    } catch (e: any) {
+      handleErrors(e.message, e.code);
+    }
+  }
+
+  async findAll(): Promise<User[]> {
+    try {
+      return this.usersRepository.find();
     } catch (e: any) {
       handleErrors(e.message, e.code);
     }
@@ -59,7 +69,7 @@ export class UsersService {
     try {
       const user = await this.usersRepository.findOne({ where: { userName, deletedAt:  null }});
 
-      if (!user) throw new HttpException('user_not_found', 404);
+      if (user == null) throw new HttpException('user_not_found', 404);
 
       return user;
     } catch (e: any) {

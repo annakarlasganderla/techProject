@@ -1,7 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsString } from 'class-validator';
+import { AbstractClass } from 'src/database/Abstract/AbstractClass.class';
 
-export class CreateUserDto {
+export class CreateUserDto extends AbstractClass {
   @ApiProperty({
     example: 'usuario_teste@teste.com',
   })
