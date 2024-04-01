@@ -1,0 +1,17 @@
+version: "1.0.3"
+
+services:
+
+  db:
+    container_name: postgres
+    image: postgres:16
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=tech
+      - APP_DB_USER=postgres
+      - APP_DB_PASS=postgres
+    ports:
+      - "5432:5432"
+    restart: always
+
